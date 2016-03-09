@@ -25,7 +25,7 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
     public function getRedirectUrl()
     {
         if (!is_array($this->data) || !isset($this->data['gw_url']) || !is_string($this->data['gw_url'])) {
-            return;
+            return null;
         }
         return $this->data['gw_url'];
     }
@@ -46,4 +46,11 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
         return null;
     }
 
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->data['state'];
+    }
 }

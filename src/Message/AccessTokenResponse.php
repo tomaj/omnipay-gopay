@@ -20,7 +20,7 @@ class AccessTokenResponse extends AbstractResponse
     public function getAccessToken()
     {
         if (!isset($this->data['access_token'])) {
-            return;
+            return null;
         }
         return $this->data['access_token'];
     }

@@ -7,6 +7,7 @@ use Omnipay\GoPay\Message\AccessTokenRequest;
 use Omnipay\GoPay\Message\AccessTokenResponse;
 use Omnipay\GoPay\Message\PurchaseRequest;
 use Omnipay\GoPay\Message\PurchaseResponse;
+use Omnipay\GoPay\Message\StatusRequest;
 
 /**
  * GoPay payment gateway
@@ -121,6 +122,22 @@ class Gateway extends AbstractGateway
         $request = parent::createRequest(PurchaseRequest::class, [
             'accessToken' => $accessTokenResponse->getAccessToken(),
             'purchaseData' => $options,
+        ]);
+        $response = $request->send();
+        return $response;
+    }
+
+    /**
+     * @param array $options
+     * @return PurchaseResponse
+     */
+    public function completePurchase(array $options = [])
+    {
+        $accessTokenResponse = $this->getAccessToken();
+
+        $request = parent::createRequest(StatusRequest::class, [
+            'accessToken' => $accessTokenResponse->getAccessToken(),
+            'paymentId' => $options['paymentId'],
         ]);
         $response = $request->send();
         return $response;
