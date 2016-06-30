@@ -11,6 +11,11 @@ class PurchaseRequest extends AbstractRequest
     private $accessToken;
 
     /**
+     * @var string
+     */
+    private $apiUrl;
+
+    /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
      *
@@ -37,7 +42,7 @@ class PurchaseRequest extends AbstractRequest
         ];
 
         $httpRequest = $this->httpClient->post(
-            'https://gw.sandbox.gopay.com/api/payments/payment',
+            $this->apiUrl . '/api/payments/payment',
             $headers,
             json_encode($data)
         );
@@ -60,5 +65,13 @@ class PurchaseRequest extends AbstractRequest
     public function setPurchaseData($data)
     {
         $this->setParameter('purchaseData', $data);
+    }
+
+    /**
+     * @param string $apiUrl
+     */
+    public function setApiUrl($apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
     }
 }

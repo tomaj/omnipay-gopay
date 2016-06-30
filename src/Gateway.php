@@ -107,6 +107,7 @@ class Gateway extends AbstractGateway
         $request = parent::createRequest(AccessTokenRequest::class, [
             'clientId' => $this->clientId,
             'clientSecret' => $this->clientSecret,
+            'apiUrl' => $this->getApiUrl(),
         ]);
         $response = $request->send();
         return $response;
@@ -122,6 +123,7 @@ class Gateway extends AbstractGateway
         $request = parent::createRequest(PurchaseRequest::class, [
             'accessToken' => $accessTokenResponse->getAccessToken(),
             'purchaseData' => $options,
+            'apiUrl' => $this->getApiUrl(),
         ]);
         $response = $request->send();
         return $response;
@@ -138,8 +140,21 @@ class Gateway extends AbstractGateway
         $request = parent::createRequest(StatusRequest::class, [
             'accessToken' => $accessTokenResponse->getAccessToken(),
             'paymentId' => $options['paymentId'],
+            'apiUrl' => $this->getApiUrl(),
         ]);
         $response = $request->send();
         return $response;
+    }
+
+    /**
+     * @return string
+     */
+    private function getApiUrl()
+    {
+        if ($this->isProductionMode) {
+            return self::URL_PRODUCTION;
+        } else {
+            return self::URL_SANDBOX;
+        }
     }
 }

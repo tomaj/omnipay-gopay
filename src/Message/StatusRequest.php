@@ -10,6 +10,11 @@ class StatusRequest extends AbstractRequest
     private $accessToken;
 
     /**
+     * @var string
+     */
+    private $apiUrl;
+
+    /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
      *
@@ -38,7 +43,7 @@ class StatusRequest extends AbstractRequest
         ];
 
         $httpRequest = $this->httpClient->get(
-            'https://gw.sandbox.gopay.com/api/payments/payment/' . $data['paymentId'],
+            $this->apiUrl . '/api/payments/payment/' . $data['paymentId'],
             $headers
         );
 
@@ -62,5 +67,13 @@ class StatusRequest extends AbstractRequest
     public function setPaymentId($paymentId)
     {
         $this->setParameter('paymentId', $paymentId);
+    }
+
+    /**
+     * @param string $apiUrl
+     */
+    public function setApiUrl($apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
     }
 }

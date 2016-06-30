@@ -6,6 +6,11 @@ use Omnipay\Common\Message\AbstractRequest;
 
 class AccessTokenRequest extends AbstractRequest
 {
+    /**
+     * @var string
+     */
+    private $apiUrl;
+
     public function setClientId($clientId)
     {
         $this->setParameter('clientId', $clientId);
@@ -32,7 +37,7 @@ class AccessTokenRequest extends AbstractRequest
         ];
 
         $httpRequest = $this->httpClient->post(
-            'https://gw.sandbox.gopay.com/api/oauth2/token',
+            $this->apiUrl . '/api/oauth2/token',
             $headers,
             $data
         );
@@ -57,6 +62,11 @@ class AccessTokenRequest extends AbstractRequest
         ];
     }
 
-
-
+    /**
+     * @param string $apiUrl
+     */
+    public function setApiUrl($apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
+    }
 }
