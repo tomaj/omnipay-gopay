@@ -7,7 +7,6 @@ use Omnipay\Common\Message\RedirectResponseInterface;
 
 class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
-
     /**
      * Is the response successful?
      *
@@ -52,5 +51,13 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
     public function getState()
     {
         return $this->data['state'];
+    }
+
+    public function getTransactionReference()
+    {
+        if (isset($this->data['id'])) {
+            return $this->data['id'];
+        }
+        return null;
     }
 }
