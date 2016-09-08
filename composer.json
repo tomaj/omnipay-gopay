@@ -17,13 +17,17 @@
     {
       "name": "Michal Sänger",
       "email": "michal.sanger@bileto.com"
+    },
+    {
+      "name": "Jan Machala",
+      "email": "jan.machala@bileto.com"
     }
   ],
   "autoload": {
     "psr-4": { "Omnipay\\GoPay\\" : "src/" }
   },
   "require": {
-    "omnipay/common": "2.3.*"
+    "omnipay/common": "~2.5.0"
   },
   "require-dev": {
     "omnipay/tests": "^2.0",
