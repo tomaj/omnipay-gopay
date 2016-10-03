@@ -45,12 +45,12 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
         return null;
     }
 
-    /**
-     * @return string
-     */
-    public function getState()
+    public function getCode()
     {
-        return $this->data['state'];
+        if (isset($this->data['state'])) {
+            return $this->data['state'];
+        }
+        return null;
     }
 
     public function getTransactionReference()
