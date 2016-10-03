@@ -7,20 +7,20 @@ use Omnipay\Omnipay;
 class GatewayFactory
 {
     /**
-     * @param string $goid
+     * @param string $goId
      * @param string $clientId
      * @param string $clientSecret
-     * @param bool $isSandbox
+     * @param bool $testMode
      * @return Gateway
      */
-    public static function createInstance($goid, $clientId, $clientSecret, $isSandbox = true)
+    public static function createInstance($goId, $clientId, $clientSecret, $testMode = true)
     {
-        $gateway = Omnipay::create('gopay');
+        $gateway = Omnipay::create('GoPay');
         $gateway->initialize([
-            'goid' => $goid,
+            'goId' => $goId,
             'clientId' => $clientId,
             'clientSecret' => $clientSecret,
-            'testMode' => $isSandbox,
+            'testMode' => $testMode,
         ]);
 
         return $gateway;

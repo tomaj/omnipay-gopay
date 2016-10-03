@@ -54,7 +54,7 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return [
-            'goid' => '',
+            'goId' => '',
             'clientId' => '',
             'clientSecret' => '',
             'testMode' => true,
@@ -88,7 +88,7 @@ class Gateway extends AbstractGateway
      */
     public function purchase(array $options = [])
     {
-        $this->setAccessToken($this->getAccessToken()->getAccessToken());
+        $this->setToken($this->getAccessToken()->getToken());
         $request = parent::createRequest(PurchaseRequest::class, $options);
         $response = $request->send();
         return $response;
@@ -100,27 +100,15 @@ class Gateway extends AbstractGateway
      */
     public function completePurchase(array $parameters = [])
     {
-        $this->setAccessToken($this->getAccessToken()->getAccessToken());
+        $this->setToken($this->getAccessToken()->getToken());
         $request = parent::createRequest(StatusRequest::class, $parameters);
         $response = $request->send();
         return $response;
     }
 
-    /**
-     * @return string
-     */
-    private function getApiUrl()
+    public function setGoId($goId)
     {
-        if ($this->getTestMode()) {
-            return self::URL_PRODUCTION;
-        } else {
-            return self::URL_SANDBOX;
-        }
-    }
-
-    public function setGoid($goid)
-    {
-        $this->setParameter('goid', $goid);
+        $this->setParameter('goId', $goId);
     }
 
     public function setClientId($clientId)
@@ -135,12 +123,18 @@ class Gateway extends AbstractGateway
 
     public function setApiUrl()
     {
-        $this->setParameter('apiUrl', $this->getApiUrl());
+        if ($this->getTestMode()) {
+            $apiUrl = self::URL_SANDBOX;
+        } else {
+            $apiUrl = self::URL_PRODUCTION;
+        }
+
+        $this->setParameter('apiUrl', $apiUrl);
     }
 
-    private function setAccessToken($accessToken)
+    private function setToken($token)
     {
-        $this->setParameter('accessToken', $accessToken);
+        $this->setParameter('token', $token);
     }
 
 }

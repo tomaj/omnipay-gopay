@@ -6,13 +6,6 @@ use Omnipay\Common\Message\AbstractRequest;
 
 class StatusRequest extends AbstractRequest
 {
-    /** @var string */
-    private $accessToken;
-
-    /**
-     * @var string
-     */
-    private $apiUrl;
 
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
@@ -39,11 +32,11 @@ class StatusRequest extends AbstractRequest
             'Accept' => 'application/json',
             'Accept-Language' => 'en-US',
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Bearer ' . $this->accessToken,
+            'Authorization' => $this->getParameter('token'),
         ];
 
         $httpRequest = $this->httpClient->get(
-            $this->apiUrl . '/api/payments/payment/' . $data['paymentId'],
+            $this->getParameter('apiUrl') . '/api/payments/payment/' . $data['paymentId'],
             $headers
         );
 
@@ -54,11 +47,11 @@ class StatusRequest extends AbstractRequest
     }
 
     /**
-     * @param string $accessToken
+     * @param string $token
      */
-    public function setAccessToken($accessToken)
+    public function setToken($token)
     {
-        $this->accessToken = $accessToken;
+        $this->setParameter('token', $token);
     }
 
     /**
@@ -74,6 +67,7 @@ class StatusRequest extends AbstractRequest
      */
     public function setApiUrl($apiUrl)
     {
-        $this->apiUrl = $apiUrl;
+        $this->setParameter('apiUrl', $apiUrl);
     }
+
 }
