@@ -15,7 +15,7 @@ class PurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        return $this->getParameters()['purchaseData'];
+        return $this->getParameter('purchaseData');
     }
 
     /**
