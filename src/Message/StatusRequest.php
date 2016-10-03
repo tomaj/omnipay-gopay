@@ -8,19 +8,6 @@ class StatusRequest extends AbstractRequest
 {
 
     /**
-     * Get the raw data array for this message. The format of this varies from gateway to
-     * gateway, but will usually be either an associative array, or a SimpleXMLElement.
-     *
-     * @return mixed
-     */
-    public function getData()
-    {
-        return [
-            'paymentId' => $this->getParameters()['paymentId'],
-        ];
-    }
-
-    /**
      * Send the request with specified data
      *
      * @param  mixed $data The data to send
@@ -36,7 +23,7 @@ class StatusRequest extends AbstractRequest
         ];
 
         $httpRequest = $this->httpClient->get(
-            $this->getParameter('apiUrl') . '/api/payments/payment/' . $data['paymentId'],
+            $this->getParameter('apiUrl') . '/api/payments/payment/' . $this->getParameter('transactionReference'),
             $headers
         );
 
@@ -55,14 +42,6 @@ class StatusRequest extends AbstractRequest
     }
 
     /**
-     * @param string $paymentId
-     */
-    public function setPaymentId($paymentId)
-    {
-        $this->setParameter('paymentId', $paymentId);
-    }
-
-    /**
      * @param string $apiUrl
      */
     public function setApiUrl($apiUrl)
@@ -70,4 +49,14 @@ class StatusRequest extends AbstractRequest
         $this->setParameter('apiUrl', $apiUrl);
     }
 
+    /**
+     * Get the raw data array for this message. The format of this varies from gateway to
+     * gateway, but will usually be either an associative array, or a SimpleXMLElement.
+     *
+     * @return mixed
+     */
+    public function getData()
+    {
+        return [];
+    }
 }
