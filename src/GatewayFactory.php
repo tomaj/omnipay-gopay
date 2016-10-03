@@ -20,7 +20,7 @@ class GatewayFactory
             'goid' => $goid,
             'clientId' => $clientId,
             'clientSecret' => $clientSecret,
-            'isProductionMode' => !$isSandbox,
+            'testMode' => $isSandbox,
         ]);
 
         return $gateway;
