@@ -2,6 +2,8 @@
 
 namespace Omnipay\GoPay;
 
+use Omnipay\Omnipay;
+
 class GatewayFactory
 {
     /**
@@ -13,7 +15,7 @@ class GatewayFactory
      */
     public static function createInstance($goid, $clientId, $clientSecret, $isSandbox = true)
     {
-        $gateway = new \Omnipay\GoPay\Gateway();
+        $gateway = Omnipay::create('gopay');
         $gateway->initialize([
             'goid' => $goid,
             'clientId' => $clientId,
