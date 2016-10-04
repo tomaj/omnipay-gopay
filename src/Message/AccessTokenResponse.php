@@ -14,15 +14,19 @@ class AccessTokenResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        return is_array($this->data) && isset($this->data['access_token']) && is_string($this->data['access_token']);
+        return is_array($this->data)
+            && isset($this->data['access_token']) && is_string($this->data['access_token'])
+            && isset($this->data['token_type']) && is_string($this->data['token_type']);
     }
 
-    public function getAccessToken()
+    /**
+     * @return string
+     */
+    public function getToken()
     {
-        if (!isset($this->data['access_token'])) {
-            return null;
-        }
-        return $this->data['access_token'];
+        $completeToken = sprintf('%s %s', ucfirst($this->data['token_type']), $this->data['access_token']);
+
+        return $completeToken;
     }
 
 }

@@ -7,14 +7,6 @@ use Omnipay\Common\Message\AbstractRequest;
 class PurchaseRequest extends AbstractRequest
 {
 
-    /** @var string */
-    private $accessToken;
-
-    /**
-     * @var string
-     */
-    private $apiUrl;
-
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -23,7 +15,7 @@ class PurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        return $this->getParameters()['purchaseData'];
+        return $this->getParameter('purchaseData');
     }
 
     /**
@@ -38,11 +30,11 @@ class PurchaseRequest extends AbstractRequest
             'Accept' => 'application/json',
             'Accept-Language' => 'en-US',
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->accessToken,
+            'Authorization' => $this->getParameter('token'),
         ];
 
         $httpRequest = $this->httpClient->post(
-            $this->apiUrl . '/api/payments/payment',
+            $this->getParameter('apiUrl') . '/api/payments/payment',
             $headers,
             json_encode($data)
         );
@@ -55,11 +47,11 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @param string $accessToken
+     * @param string $token
      */
-    public function setAccessToken($accessToken)
+    public function setToken($token)
     {
-        $this->accessToken = $accessToken;
+        $this->setParameter('token', $token);
     }
 
     public function setPurchaseData($data)
@@ -72,6 +64,6 @@ class PurchaseRequest extends AbstractRequest
      */
     public function setApiUrl($apiUrl)
     {
-        $this->apiUrl = $apiUrl;
+        $this->setParameter('apiUrl', $apiUrl);
     }
 }

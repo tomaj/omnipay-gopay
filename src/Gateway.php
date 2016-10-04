@@ -8,6 +8,7 @@ use Omnipay\GoPay\Message\AccessTokenResponse;
 use Omnipay\GoPay\Message\PurchaseRequest;
 use Omnipay\GoPay\Message\PurchaseResponse;
 use Omnipay\GoPay\Message\StatusRequest;
+use Omnipay\GoPay\Message\Notification;
 
 /**
  * GoPay payment gateway
@@ -17,20 +18,9 @@ use Omnipay\GoPay\Message\StatusRequest;
  */
 class Gateway extends AbstractGateway
 {
+
     const URL_SANDBOX = 'https://gw.sandbox.gopay.com';
     const URL_PRODUCTION = 'https://gate.gopay.cz';
-
-    /** @var string */
-    private $goid;
-
-    /** @var string */
-    private $clientId;
-
-    /** @var string */
-    private $clientSecret;
-
-    /** @var bool */
-    private $isProductionMode;
 
     /**
      * Get gateway display name
@@ -65,10 +55,10 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return [
-            'goid' => '',
+            'goId' => '',
             'clientId' => '',
             'clientSecret' => '',
-            'isProductionMode' => false,
+            'testMode' => true,
         ];
     }
 
@@ -77,25 +67,9 @@ class Gateway extends AbstractGateway
      */
     public function initialize(array $parameters = [])
     {
-        if (isset($parameters['goid'])) $this->goid = $parameters['goid'];
-        if (isset($parameters['clientId'])) $this->clientId = $parameters['clientId'];
-        if (isset($parameters['clientSecret'])) $this->clientSecret = $parameters['clientSecret'];
-        if (isset($parameters['isProductionMode'])) $this->isProductionMode = $parameters['isProductionMode'];
-    }
-
-    /**
-     * Get all gateway parameters
-     *
-     * @return array
-     */
-    public function getParameters()
-    {
-        return [
-            'goid' => $this->goid,
-            'clientId' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
-            'isProductionMode' => $this->isProductionMode,
-        ];
+        parent::initialize($parameters);
+        $this->setApiUrl();
+        return $this;
     }
 
     /**
@@ -104,11 +78,7 @@ class Gateway extends AbstractGateway
     public function getAccessToken()
     {
         /** @var AccessTokenRequest $request */
-        $request = parent::createRequest(AccessTokenRequest::class, [
-            'clientId' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
-            'apiUrl' => $this->getApiUrl(),
-        ]);
+        $request = parent::createRequest(AccessTokenRequest::class, $this->getParameters());
         $response = $request->send();
         return $response;
     }
@@ -119,42 +89,70 @@ class Gateway extends AbstractGateway
      */
     public function purchase(array $options = [])
     {
-        $accessTokenResponse = $this->getAccessToken();
-        $request = parent::createRequest(PurchaseRequest::class, [
-            'accessToken' => $accessTokenResponse->getAccessToken(),
-            'purchaseData' => $options,
-            'apiUrl' => $this->getApiUrl(),
-        ]);
+        $this->setToken($this->getAccessToken()->getToken());
+        $request = parent::createRequest(PurchaseRequest::class, $options);
         $response = $request->send();
         return $response;
     }
 
     /**
-     * @param array $options
+     * @param array $parameters
      * @return PurchaseResponse
      */
-    public function completePurchase(array $options = [])
+    public function completePurchase(array $parameters = [])
     {
-        $accessTokenResponse = $this->getAccessToken();
-
-        $request = parent::createRequest(StatusRequest::class, [
-            'accessToken' => $accessTokenResponse->getAccessToken(),
-            'paymentId' => $options['paymentId'],
-            'apiUrl' => $this->getApiUrl(),
-        ]);
+        $this->setToken($this->getAccessToken()->getToken());
+        $request = parent::createRequest(StatusRequest::class, $parameters);
         $response = $request->send();
         return $response;
     }
 
-    /**
-     * @return string
-     */
-    private function getApiUrl()
+    public function acceptNotification()
     {
-        if ($this->isProductionMode) {
-            return self::URL_PRODUCTION;
-        } else {
-            return self::URL_SANDBOX;
-        }
+        $this->setToken($this->getAccessToken()->getToken());
+        $parameters = ['transactionReference' => $this->httpRequest->query->get('id')];
+        $request = parent::createRequest(StatusRequest::class, $parameters);
+        /** @var PurchaseResponse $response */
+        $response = $request->send();
+        $parameters = [
+            'code' => $response->getCode(),
+            'transactionReference' => $response->getTransactionReference(),
+            'transactionId' => $response->getTransactionId(),
+            'data' => $response->getData()
+        ];
+
+        return new Notification($this->httpRequest, $this->httpClient, $parameters);
     }
+
+    public function setGoId($goId)
+    {
+        $this->setParameter('goId', $goId);
+    }
+
+    public function setClientId($clientId)
+    {
+        $this->setParameter('clientId', $clientId);
+    }
+
+    public function setClientSecret($clientSecret)
+    {
+        $this->setParameter('clientSecret', $clientSecret);
+    }
+
+    public function setApiUrl()
+    {
+        if ($this->getTestMode()) {
+            $apiUrl = self::URL_SANDBOX;
+        } else {
+            $apiUrl = self::URL_PRODUCTION;
+        }
+
+        $this->setParameter('apiUrl', $apiUrl);
+    }
+
+    private function setToken($token)
+    {
+        $this->setParameter('token', $token);
+    }
+
 }

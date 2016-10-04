@@ -6,10 +6,6 @@ use Omnipay\Common\Message\AbstractRequest;
 
 class AccessTokenRequest extends AbstractRequest
 {
-    /**
-     * @var string
-     */
-    private $apiUrl;
 
     public function setClientId($clientId)
     {
@@ -37,7 +33,7 @@ class AccessTokenRequest extends AbstractRequest
         ];
 
         $httpRequest = $this->httpClient->post(
-            $this->apiUrl . '/api/oauth2/token',
+            $this->getParameter('apiUrl') . '/api/oauth2/token',
             $headers,
             $data
         );
@@ -67,6 +63,6 @@ class AccessTokenRequest extends AbstractRequest
      */
     public function setApiUrl($apiUrl)
     {
-        $this->apiUrl = $apiUrl;
+        $this->setParameter('apiUrl', $apiUrl);
     }
 }

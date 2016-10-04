@@ -6,26 +6,6 @@ use Omnipay\Common\Message\AbstractRequest;
 
 class StatusRequest extends AbstractRequest
 {
-    /** @var string */
-    private $accessToken;
-
-    /**
-     * @var string
-     */
-    private $apiUrl;
-
-    /**
-     * Get the raw data array for this message. The format of this varies from gateway to
-     * gateway, but will usually be either an associative array, or a SimpleXMLElement.
-     *
-     * @return mixed
-     */
-    public function getData()
-    {
-        return [
-            'paymentId' => $this->getParameters()['paymentId'],
-        ];
-    }
 
     /**
      * Send the request with specified data
@@ -39,11 +19,11 @@ class StatusRequest extends AbstractRequest
             'Accept' => 'application/json',
             'Accept-Language' => 'en-US',
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => 'Bearer ' . $this->accessToken,
+            'Authorization' => $this->getParameter('token'),
         ];
 
         $httpRequest = $this->httpClient->get(
-            $this->apiUrl . '/api/payments/payment/' . $data['paymentId'],
+            $this->getParameter('apiUrl') . '/api/payments/payment/' . $this->getParameter('transactionReference'),
             $headers
         );
 
@@ -54,19 +34,11 @@ class StatusRequest extends AbstractRequest
     }
 
     /**
-     * @param string $accessToken
+     * @param string $token
      */
-    public function setAccessToken($accessToken)
+    public function setToken($token)
     {
-        $this->accessToken = $accessToken;
-    }
-
-    /**
-     * @param string $paymentId
-     */
-    public function setPaymentId($paymentId)
-    {
-        $this->setParameter('paymentId', $paymentId);
+        $this->setParameter('token', $token);
     }
 
     /**
@@ -74,6 +46,17 @@ class StatusRequest extends AbstractRequest
      */
     public function setApiUrl($apiUrl)
     {
-        $this->apiUrl = $apiUrl;
+        $this->setParameter('apiUrl', $apiUrl);
+    }
+
+    /**
+     * Get the raw data array for this message. The format of this varies from gateway to
+     * gateway, but will usually be either an associative array, or a SimpleXMLElement.
+     *
+     * @return mixed
+     */
+    public function getData()
+    {
+        return [];
     }
 }
