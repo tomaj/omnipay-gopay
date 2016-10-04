@@ -38,6 +38,7 @@ try {
             ],
             'callback'          => [
                 'return_url' => $returnUrl,
+                'notification_url' => $notifyUrl,
             ],
         ],
     ];

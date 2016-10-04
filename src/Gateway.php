@@ -8,6 +8,7 @@ use Omnipay\GoPay\Message\AccessTokenResponse;
 use Omnipay\GoPay\Message\PurchaseRequest;
 use Omnipay\GoPay\Message\PurchaseResponse;
 use Omnipay\GoPay\Message\StatusRequest;
+use Omnipay\GoPay\Message\Notification;
 
 /**
  * GoPay payment gateway
@@ -104,6 +105,23 @@ class Gateway extends AbstractGateway
         $request = parent::createRequest(StatusRequest::class, $parameters);
         $response = $request->send();
         return $response;
+    }
+
+    public function acceptNotification()
+    {
+        $this->setToken($this->getAccessToken()->getToken());
+        $parameters = ['transactionReference' => $this->httpRequest->query->get('id')];
+        $request = parent::createRequest(StatusRequest::class, $parameters);
+        /** @var PurchaseResponse $response */
+        $response = $request->send();
+        $parameters = [
+            'code' => $response->getCode(),
+            'transactionReference' => $response->getTransactionReference(),
+            'transactionId' => $response->getTransactionId(),
+            'data' => $response->getData()
+        ];
+
+        return new Notification($this->httpRequest, $this->httpClient, $parameters);
     }
 
     public function setGoId($goId)
