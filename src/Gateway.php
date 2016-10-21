@@ -110,7 +110,7 @@ class Gateway extends AbstractGateway
     public function acceptNotification()
     {
         $this->setToken($this->getAccessToken()->getToken());
-        $parameters = ['transactionReference' => $this->httpRequest->query->get('id')];
+        $parameters = ['transactionReference' => $this->httpRequest->query->get('paymentSessionId')];
         $request = parent::createRequest(StatusRequest::class, $parameters);
         /** @var PurchaseResponse $response */
         $response = $request->send();
