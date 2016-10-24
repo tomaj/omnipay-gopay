@@ -13,9 +13,7 @@ $clientId = $_ENV['CLIENT_ID'];
 $clientSecret = $_ENV['CLIENT_SECRET'];
 
 $parameters = [
-    'paymentSessionId'   => '3044372331',
-    'targetGoId' => $goId,
-    'orderNumber' => 'orderNumer',
+    'id'   => '3044372331',
 ];
 $httpRequest = Request::create('/notify', 'GET', $parameters, [], [], [], []);
 
