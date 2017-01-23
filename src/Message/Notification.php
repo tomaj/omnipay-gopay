@@ -68,7 +68,7 @@ class Notification implements NotificationInterface
                 return self::STATUS_COMPLETED;
             } elseif (in_array($status, ['AUTHORIZED', 'PAYMENT_METHOD_CHOSEN', 'CREATED'], true)) {
                 return self::STATUS_PENDING;
-            } elseif (in_array($status, ['CANCELED', 'TIMEOUTED'], true)) {
+            } elseif (in_array($status, ['CANCELED', 'TIMEOUTED', 'REFUNDED'], true)) {
                 return self::STATUS_FAILED;
             }
             throw new InvalidRequestException('We have received unknown status "' . $status . '"');
