@@ -36,8 +36,8 @@ class Notification implements NotificationInterface
      */
     public function getTransactionReference()
     {
-        if (isset($this->getData()['transactionReference'])) {
-            return $this->getData()['transactionReference'];
+        if (isset($this->getData()['transactionReference']) && !empty(isset($this->getData()['transactionReference']))) {
+            return (string) $this->getData()['transactionReference'];
         }
 
         return null;
