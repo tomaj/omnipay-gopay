@@ -74,7 +74,7 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @return AccessTokenResponse|ResponseInterface
+     * @return AccessTokenResponse
      */
     public function getAccessToken()
     {
@@ -86,7 +86,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $options
-     * @return PurchaseResponse|ResponseInterface
+     * @return PurchaseResponse
      */
     public function purchase(array $options = array())
     {
@@ -98,7 +98,7 @@ class Gateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return PurchaseResponse|ResponseInterface
+     * @return PurchaseResponse
      */
     public function completePurchase(array $parameters = array())
     {
