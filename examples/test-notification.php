@@ -4,8 +4,9 @@ require '../vendor/autoload.php';
 
 use Omnipay\GoPay\GatewayFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Dotenv\Dotenv;
 
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv = Dotenv::create(__DIR__ . '/..');
 $dotenv->load();
 
 $goId = $_ENV['GO_ID'];
@@ -13,7 +14,7 @@ $clientId = $_ENV['CLIENT_ID'];
 $clientSecret = $_ENV['CLIENT_SECRET'];
 
 $parameters = [
-    'id'   => '3044372331',
+    'id'   => '3081704379',
 ];
 $httpRequest = Request::create('/notify', 'GET', $parameters, [], [], [], []);
 

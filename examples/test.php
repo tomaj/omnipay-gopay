@@ -4,8 +4,9 @@ require '../vendor/autoload.php';
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Omnipay\GoPay\GatewayFactory;
+use Dotenv\Dotenv;
 
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv = Dotenv::create(__DIR__ . '/..');
 $dotenv->load();
 
 $goId = $_ENV['GO_ID'];
@@ -35,6 +36,14 @@ try {
             'order_description' => $description,
             'items'             => [
                 ['count' => 1, 'name' => $description, 'amount' => 15000],
+            ],
+            'eet'               => [
+                "celk_trzba" => 15000,
+                "zakl_dan1"  => 14000,
+                "dan1"       => 1000,
+                "zakl_dan2"  => 14000,
+                "dan2"       => 1000,
+                "mena"       => 'CZK'
             ],
             'callback'          => [
                 'return_url' => $returnUrl,

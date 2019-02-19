@@ -4,8 +4,9 @@ require '../vendor/autoload.php';
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Omnipay\GoPay\GatewayFactory;
+use Dotenv\Dotenv;
 
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv = Dotenv::create(__DIR__ . '/..');
 $dotenv->load();
 
 $goId = $_ENV['GO_ID'];
@@ -15,7 +16,7 @@ $clientSecret = $_ENV['CLIENT_SECRET'];
 $gateway = GatewayFactory::createInstance($goId, $clientId, $clientSecret, true);
 
 try {
-    $completeRequest = ['transactionReference' => '3044354339'];
+    $completeRequest = ['transactionReference' => '3081704379'];
     $response = $gateway->completePurchase($completeRequest);
 
     echo "Is Successful: " . $response->isSuccessful() . PHP_EOL;
