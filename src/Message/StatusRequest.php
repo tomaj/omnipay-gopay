@@ -22,13 +22,14 @@ class StatusRequest extends AbstractRequest
             'Authorization' => $this->getParameter('token'),
         ];
 
-        $httpRequest = $this->httpClient->get(
+        $httpResponse = $this->httpClient->request(
+            'GET',
             $this->getParameter('apiUrl') . '/api/payments/payment/' . $this->getParameter('transactionReference'),
             $headers
         );
 
-        $httpResponse = $httpRequest->send();
-        $statusResponseData = $httpResponse->json();
+        $statusResponseData = json_decode($httpResponse->getBody()->getContents(), true);
+
         $response = new PurchaseResponse($this, $statusResponseData);
         return $response;
     }

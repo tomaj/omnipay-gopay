@@ -33,14 +33,14 @@ class PurchaseRequest extends AbstractRequest
             'Authorization' => $this->getParameter('token'),
         ];
 
-        $httpRequest = $this->httpClient->post(
+        $httpResponse = $this->httpClient->request(
+            'POST',
             $this->getParameter('apiUrl') . '/api/payments/payment',
             $headers,
             json_encode($data)
         );
 
-        $httpResponse = $httpRequest->send();
-        $purchaseResponseData = $httpResponse->json();
+        $purchaseResponseData = json_decode($httpResponse->getBody()->getContents(), true);
 
         $response = new PurchaseResponse($this, $purchaseResponseData);
         return $response;
