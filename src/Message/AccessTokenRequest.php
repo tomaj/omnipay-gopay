@@ -32,13 +32,14 @@ class AccessTokenRequest extends AbstractRequest
             'Authorization' => 'Basic ' . base64_encode($credentials),
         ];
 
-        $httpRequest = $this->httpClient->post(
+        $httpResponse = $this->httpClient->request(
+            'POST',
             $this->getParameter('apiUrl') . '/api/oauth2/token',
             $headers,
-            $data
+            http_build_query($data)
         );
-        $httpResponse = $httpRequest->send();
-        $tokenData = $httpResponse->json();
+
+        $tokenData = json_decode($httpResponse->getBody()->getContents(), true);
 
         $response = new AccessTokenResponse($this, $tokenData);
         return $response;
