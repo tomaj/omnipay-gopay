@@ -28,9 +28,8 @@ class StatusRequest extends AbstractRequest
             $headers
         );
 
-
         $statusResponseData = json_decode($httpResponse->getBody()->getContents(), true);
-        dump($statusResponseData);
+
         $response = new PurchaseResponse($this, $statusResponseData);
         return $response;
     }
