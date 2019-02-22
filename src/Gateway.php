@@ -8,6 +8,8 @@ use Omnipay\GoPay\Message\AccessTokenRequest;
 use Omnipay\GoPay\Message\AccessTokenResponse;
 use Omnipay\GoPay\Message\PurchaseRequest;
 use Omnipay\GoPay\Message\PurchaseResponse;
+use Omnipay\GoPay\Message\RecurrenceRequest;
+use Omnipay\GoPay\Message\CancelRecurrenceRequest;
 use Omnipay\GoPay\Message\StatusRequest;
 use Omnipay\GoPay\Message\Notification;
 
@@ -107,6 +109,31 @@ class Gateway extends AbstractGateway
         $response = $request->send();
         return $response;
     }
+
+    /**
+     * @param array $options
+     * @return PurchaseResponse
+     */
+    public function recurrence(array $options = array())
+    {
+        $this->setToken($this->getAccessToken()->getToken());
+        $request = parent::createRequest(RecurrenceRequest::class, $options);
+        $response = $request->send();
+        return $response;
+    }
+
+    /**
+     * @param array $options
+     * @return PurchaseResponse
+     */
+    public function cancelRecurrence(array $options = array())
+    {
+        $this->setToken($this->getAccessToken()->getToken());
+        $request = parent::createRequest(CancelRecurrenceRequest::class, $options);
+        $response = $request->send();
+        return $response;
+    }
+
 
     public function acceptNotification()
     {

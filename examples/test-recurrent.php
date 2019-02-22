@@ -22,20 +22,14 @@ try {
     $description = 'Shopping at myStore.com';
 
     $goPayOrder = [
+        'transactionReference' => '3081796328',
         'purchaseData' => [
-            'payer'             => [
-                'default_payment_instrument' => 'PAYMENT_CARD',
-            ],
-            'target'            => [
-                'type' => 'ACCOUNT',
-                'goid' => $goId,
-            ],
-            'amount'            => 15000,
+            'amount'            => 1000,
             'currency'          => 'CZK',
             'order_number'      => $orderNo,
             'order_description' => $description,
             'items'             => [
-                ['count' => 1, 'name' => $description, 'amount' => 15000],
+                ['count' => 1, 'name' => $description, 'amount' => 1000],
             ],
             'eet'               => [
                 "celk_trzba" => 15000,
@@ -45,28 +39,17 @@ try {
                 "dan2"       => 1000,
                 "mena"       => 'CZK'
             ],
-            // 'recurrence' => [
-            //     'recurrence_cycle' => 'ON_DEMAND',
-            //     'recurrence_date_to' => '2021-01-01',
-            // ],
-            'callback'          => [
-                'return_url' => $returnUrl,
-                'notification_url' => $notifyUrl,
-            ],
         ],
     ];
 
+    $response = $gateway->recurrence($goPayOrder);
 
-    $response = $gateway->purchase($goPayOrder);
-dump($response->isRedirect());
     echo 'Our OrderNo: ' . $orderNo . PHP_EOL;
-    echo "TransactionId: " . $response->getTransactionId() . PHP_EOL;
+    echo "Parent id: " . $response->getParentId() . PHP_EOL;
     echo "TransactionReference: " . $response->getTransactionReference() . PHP_EOL;
     echo 'Is Successful: ' . (bool) $response->isSuccessful() . PHP_EOL;
     echo 'Is redirect: ' . (bool) $response->isRedirect() . PHP_EOL;
 
-    // Payment init OK, redirect to the payment gateway
-    echo $response->getRedirectUrl() . PHP_EOL;
 } catch (ClientErrorResponseException $e) {
     dump((string)$e);
     dump($e->getResponse()->getBody(true));
