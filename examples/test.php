@@ -58,7 +58,7 @@ try {
 
 
     $response = $gateway->purchase($goPayOrder);
-dump($response->isRedirect());
+
     echo 'Our OrderNo: ' . $orderNo . PHP_EOL;
     echo "TransactionId: " . $response->getTransactionId() . PHP_EOL;
     echo "TransactionReference: " . $response->getTransactionReference() . PHP_EOL;

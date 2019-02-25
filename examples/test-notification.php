@@ -14,7 +14,7 @@ $clientId = $_ENV['CLIENT_ID'];
 $clientSecret = $_ENV['CLIENT_SECRET'];
 
 $parameters = [
-    'id'   => '3081796354',
+    'id'   => '8027392945',
 ];
 $httpRequest = Request::create('/notify', 'GET', $parameters, [], [], [], []);
 
@@ -33,6 +33,5 @@ try {
     echo "Data: " . var_export($response->getData(), true) . PHP_EOL;
 
 } catch (\Exception $e) {
-    dump($e->getResponse()->getBody(true));
     dump((string)$e);
 }
