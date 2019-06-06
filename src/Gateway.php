@@ -111,6 +111,18 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * @param array $parameters
+     * @return PurchaseResponse
+     */
+    public function status(array $parameters = array())
+    {
+        $this->setToken($this->getAccessToken()->getToken());
+        $request = parent::createRequest(StatusRequest::class, $parameters);
+        $response = $request->send();
+        return $response;
+    }
+
+    /**
      * @param array $options
      * @return PurchaseResponse
      */
