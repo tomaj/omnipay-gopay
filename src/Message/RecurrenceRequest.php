@@ -54,6 +54,22 @@ class RecurrenceRequest extends AbstractRequest
 
         $purchaseResponseData = json_decode($httpResponse->getBody()->getContents(), true);
 
+        $data = $purchaseResponseData;
+        $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        $firstRun = true;
+        while ($purchaseResponseData['state'] == 'CREATED') {
+            $httpResponse = $this->httpClient->request(
+                'GET',
+                $this->getParameter('apiUrl') . '/api/payments/payment/' . $transactionReference,
+                $headers
+            );
+            $purchaseResponseData = json_decode($httpResponse->getBody()->getContents(), true);
+            if (!$firstRun) {
+                sleep(2);
+            }
+            $firstRun = false;
+        }
+
         $response = new RecurrenceResponse($this, $purchaseResponseData);
         return $response;
     }

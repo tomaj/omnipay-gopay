@@ -14,7 +14,7 @@ class RecurrenceResponse extends AbstractResponse implements RedirectResponseInt
      */
     public function isSuccessful()
     {
-        return in_array($this->getCode(), ['CREATED']);
+        return in_array($this->getCode(), ['PAID']);
     }
 
     public function isRedirect()
